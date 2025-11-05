@@ -4,6 +4,7 @@ import { JwtVerifyAuth } from "../functions/jwt"
 import { Usuario } from "../entities/usuario.entity"
 import { Conta } from "../entities/conta.entity"
 
+
 const usuarioRoutes = Router()
 const usuarioRepo = pixDs.getRepository(Usuario)
 
@@ -40,6 +41,35 @@ usuarioRoutes.post("/",
         resp.json({ "status:": usuario.id })
     }
 )
+
+usuarioRoutes.post("/verify-data",
+    async (req: Request, resp: Response) => {
+        console.log("Chegou aqui")
+        const userData = req.body
+    
+        const existingUserCPF = await usuarioRepo.findOne({ where: { cpfcnpj: userData.cpfcnpj } });
+
+        const existingUserEmail = await usuarioRepo.findOne({ where: { email: userData.email } });
+
+        const existingPhone = await usuarioRepo.findOne({ where: { telefone: userData.telefone } });
+        const existingUserConta = await usuarioRepo.findOne({ where: { conta: { nroConta: userData.conta.nroConta } } });
+        if (existingUserCPF) {
+            return resp.status(400).json({ exists: true, message: `CPF` });
+        } 
+        if (existingUserEmail) {
+            return resp.status(400).json({ exists: true, message: `E-mail` });
+        } 
+        if (existingUserConta) {
+            return resp.status(400).json({ exists: true, message: `Número de conta` });
+        } 
+        if (existingPhone) {
+            return resp.status(400).json({ exists: true, message: `Telefone` });
+        }
+        resp.status(200).json({ exists: false, message: `Dados disponíveis para cadastro.` });
+    }
+)
+
+
 
 
 usuarioRoutes.get("/",
