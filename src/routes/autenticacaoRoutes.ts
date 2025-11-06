@@ -52,7 +52,7 @@ autenticacaoRoutes.post("/login", async (req: Request, resp: Response) => {
 
         resp.statusCode = 201;
         resp.statusMessage = "Created"
-        resp.json({ "status:": token })
+        resp.json({ "status": "PASSANDO", "token": token, "nameUser": usuario.nome, "saldo": saldoUsuario?.saldo, "userId": existsUser?.usuario.id })
       }
 
       try {
@@ -60,7 +60,7 @@ autenticacaoRoutes.post("/login", async (req: Request, resp: Response) => {
         const verifia = await JwtVerify(existsUser.token)
         resp.statusCode = 200;
         resp.statusMessage = "Correto"
-        resp.json({ "status:": "PASSANDO", "token:": existsUser.token, "nameUser": usuario.nome, "saldo": saldoUsuario?.saldo })
+        resp.json({ "status:": "PASSANDO", "token": existsUser.token, "nameUser": usuario.nome, "saldo": saldoUsuario?.saldo, "userId": existsUser.usuario.id })
         }
 
       } catch (e: any) {
