@@ -3,10 +3,11 @@ import { pixDs } from "../data-source";
 import { JwtVerifyAuth } from "../functions/jwt";
 import { Usuario } from "../entities/usuario.entity";
 import { Conta } from "../entities/conta.entity";
+import { Chave } from "../entities/chave.entity";
 
 const usuarioRoutes = Router();
 const usuarioRepo = pixDs.getRepository(Usuario);
-
+const chaveRepo = pixDs.getRepository(Chave)
 usuarioRoutes.post("/", async (req: Request, resp: Response) => {
   const userData = req.body;
   let usuario = new Usuario();
@@ -166,6 +167,9 @@ usuarioRoutes.delete("/:usuarioId", async (req: Request, resp: Response) => {
     resp.send();
   }
 });
+
+
+
 
 usuarioRoutes.get(
   "/:usuarioId/chaves",
